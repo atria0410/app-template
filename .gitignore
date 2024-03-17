@@ -1,0 +1,6 @@
+.env
+
+web/log/interface/*
+!web/log/interface/.gitkeep
+web/log/api/*
+!web/log/api/.gitkeep

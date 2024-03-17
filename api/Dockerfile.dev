@@ -1,0 +1,12 @@
+FROM python:3.12.2
+
+WORKDIR /app/fastapi
+
+ENV PYTHONPATH "/app/fastapi:$PYTHONPATH"
+ENV PYTHONDONTWRITEBYTECODE 1
+
+COPY ./fastapi /app/fastapi
+
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+CMD ["python3" , "-m" , "debugpy" , "--listen" , "0.0.0.0:5678" , "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--log-config", "log_conf.yaml"]

@@ -1,0 +1,40 @@
+{
+  "name": "api",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "api",
+  "shutdownAction": "none",
+  "workspaceFolder": "/app/fastapi",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "shardulm94.trailing-spaces",
+        "wayou.vscode-todo-highlight",
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "ms-python.isort"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+        "black-formatter.args": ["--line-length=120"],
+        "cSpell.words": [
+          "fastapi",
+          "pydantic",
+          "uvicorn",
+          "pytest",
+          "sqlalchemy",
+          "sessionmaker",
+          "onupdate"
+        ]
+      }
+    }
+  }
+}

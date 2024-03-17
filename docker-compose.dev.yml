@@ -1,0 +1,86 @@
+volumes:
+  node_modules:
+  db-store-dev:
+networks:
+  myapp-network:
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    volumes:
+      - ./web/log/interface:/var/log/nginx/interface
+      - ./web/log/api:/var/log/nginx/api
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "${UI_PORT}:3000"
+      - "${API_PORT}:8000"
+    networks:
+      - myapp-network
+    depends_on:
+      - interface
+      - api
+
+  interface:
+    build:
+      context: ./interface
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./interface/nuxt:/app/nuxt
+      - node_modules:/app/nuxt/node_modules
+    environment:
+      - TZ=${TZ}
+      - API_BASE_URL=${SCHEME}://${HOST}:${API_PORT}
+    networks:
+      - myapp-network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./api/fastapi:/app/fastapi
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - TEST_DB_NAME=${TEST_DB_NAME}
+      - UI_ORIGIN=${SCHEME}://${HOST}:${UI_PORT}
+    networks:
+      - myapp-network
+    depends_on:
+      - db
+
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - db-store-dev:/var/lib/postgresql/data
+    environment:
+      - TZ=${TZ}
+      - POSTGRES_MULTIPLE_DATABASES=${DB_NAME},${TEST_DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    networks:
+      - myapp-network
+
+  pgadmin:
+    image: elestio/pgadmin:latest
+    ports:
+      - "${PGADMIN_PORT}:80"
+    environment:
+      - TZ=${TZ}
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+    networks:
+      - myapp-network
+    depends_on:
+      - db

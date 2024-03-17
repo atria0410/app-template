@@ -1,0 +1,29 @@
+{
+  "name": "interface",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "interface",
+  "shutdownAction": "none",
+  "workspaceFolder": "/app/nuxt",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "shardulm94.trailing-spaces",
+        "wayou.vscode-todo-highlight",
+        "dbaeumer.vscode-eslint",
+        "vue.volar",
+        "vuetifyjs.vuetify-vscode"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "never",
+          "source.fixAll.eslint": "explicit"
+        },
+        "cSpell.words": ["nuxt", "nuxtjs", "vuetify"]
+      }
+    }
+  }
+}
